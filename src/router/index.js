@@ -69,14 +69,14 @@ export const constantRoutes = [
 // 定义一个动态路由变量
 // 这里导出的变量 后面做权限会用
 export const asyncRoutes = [
-  approvalsRouter,
-  attendancesRouter,
   departmentsRouter,
   employeesRouter,
-  permissionRouter,
-  salarysRouter,
   settingRouter,
-  socialRouter
+  permissionRouter,
+  socialRouter,
+  attendancesRouter,
+  approvalsRouter,
+  salarysRouter
 ]
 const createRouter = () => new Router({
   // mode: 'history', // require service support
