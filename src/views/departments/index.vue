@@ -10,12 +10,12 @@
           :props="defaultProps"
           default-expand-all
         >
-          <tree-tools slot-scope="{data}" :tree-node="data" @addDepts="addDepts" @delDepts="getDepartments" />
+          <tree-tools slot-scope="{data}" :tree-node="data" @addDepts="addDepts" @delDepts="getDepartments" @editDepts="editDepts" />
         </el-tree>
       </el-card>
     </div>
     <!-- 放置新增弹层组件 -->
-    <add-dept :show-dialog="showDialog" :tree-node="node" />
+    <add-dept :show-dialog.sync="showDialog" :tree-node="node" @addDepts="getDepartments" />
   </div>
 </template>
 
@@ -48,15 +48,19 @@ export default {
   },
 
   methods: {
-    // 定义一个方法(和接口名一样的的方法)
+    // 定义一个方法(和接口名一样的的方法) 重新拉取数据的方法
     async getDepartments() {
       const result = await getDepartments()
-      this.company = { name: result.companyName, manager: '负责人' }// depts是所有的数组
+      this.company = { name: result.companyName, manager: '负责人', id: '' }// depts是所有的数组
       this.departs = tranListToTreeData(result.depts, '') // 需要将其转换成树形结构
       console.log(result)
     },
     // 监听tree-tools中触发的点击添加子部门的事件
     addDepts(node) {
+      this.showDialog = true
+      this.node = node
+    },
+    editDepts(node) {
       this.showDialog = true
       this.node = node
     }

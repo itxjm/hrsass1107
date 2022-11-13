@@ -121,7 +121,7 @@ export function param2Obj(url) {
 export function tranListToTreeData(list, rootValue) {
   const arr = []
   list.forEach(item => {
-    if (item.pid === rootValue) { // 默认第一次rootValue为空
+    if (item.pid === rootValue) { // 默认第一次rootValue为空字符串
       // 找到之后 就要去找item下面有没有子节点
       const children = tranListToTreeData(list, item.id)
       if (children.length) {
