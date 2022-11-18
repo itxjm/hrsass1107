@@ -10,7 +10,7 @@
     >
       <div class="title-container">
         <h3 class="title">
-          <img src="@/assets/common/login-logo.png" alt="" />
+          <img src="@/assets/common/login-logo.png" alt="">
         </h3>
       </div>
 
@@ -46,7 +46,7 @@
         />
         <!-- native表示监听组件的原生事件 -->
         <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>
+          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
 
@@ -56,8 +56,7 @@
         type="primary"
         style="width: 100%; margin-bottom: 30px"
         @click.native.prevent="handleLogin"
-        >登录</el-button
-      >
+      >登录</el-button>
 
       <div class="tips">
         <span style="margin-right: 20px">username: 13800000002</span>
@@ -68,11 +67,11 @@
 </template>
 
 <script>
-import { validMobile } from "@/utils/validate"
+import { validMobile } from '@/utils/validate'
 import { mapActions } from 'vuex'
 
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
     const validateMobile = (rule, value, callback) => {
       // 校验成功 callback()
@@ -82,8 +81,8 @@ export default {
       // } else {
       //   callback();
       // }
-      validMobile(value) ? callback() : callback(new Error("手机号格式不正确"));
-    };
+      validMobile(value) ? callback() : callback(new Error('手机号格式不正确'))
+    }
     // const validatePassword = (rule, value, callback) => {
     //   if (value.length < 6) {
     //     callback(new Error("The password can not be less than 6 digits"));
@@ -93,69 +92,69 @@ export default {
     // };
     return {
       loginForm: {
-        mobile: "13800000002",
-        password: "123456",
+        mobile: '13800000002',
+        password: '123456'
       },
       loginRules: {
         // trigger 校验触发方式
         // validator自定义函数
         mobile: [
-          { required: true, trigger: "blur", message: "手机号不能为空" },
+          { required: true, trigger: 'blur', message: '手机号不能为空' },
           {
             validator: validateMobile,
-            trigger: "blur",
-          },
+            trigger: 'blur'
+          }
         ],
         password: [
-          { required: true, trigger: "blur", message: "密码不能为空" },
+          { required: true, trigger: 'blur', message: '密码不能为空' },
           {
-            trigger: "blur",
+            trigger: 'blur',
             min: 6,
             max: 16,
-            message: "密码长度为6-16位之间",
-          },
-        ],
+            message: '密码长度为6-16位之间'
+          }
+        ]
       },
       loading: false,
-      passwordType: "password",
-      redirect: undefined,
-    };
+      passwordType: 'password',
+      redirect: undefined
+    }
   },
   watch: {
     $route: {
-      handler: function (route) {
-        this.redirect = route.query && route.query.redirect;
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   methods: {
-    ...mapActions(['user/login']), //引入方法
+    ...mapActions(['user/login']), // 引入方法
     showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
       } else {
-        this.passwordType = "password";
+        this.passwordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
+        this.$refs.password.focus()
+      })
     },
     handleLogin() {
       // 表单的手动校验
       this.$refs.loginForm.validate(async isOK => {
-        if(isOK){
+        if (isOK) {
           try {
             this.loading = true
             // 只有校验通过 才去调用action
-           await this['user/login'](this.loginForm)
-          //  登录成功之后 
-          // async标记的函数实际上是一个promise对象
-          // await下面的代码 都是成功执行的代码
-          this.$router.push('/')
+            await this['user/login'](this.loginForm)
+            //  登录成功之后
+            // async标记的函数实际上是一个promise对象
+            // await下面的代码 都是成功执行的代码
+            this.$router.push('/')
           } catch (error) {
             console.log(error)
-          }finally{
+          } finally {
             // 不论执行try还是catch 都去关闭转圈
             this.loading = false
           }
@@ -163,9 +162,9 @@ export default {
       })
       // ref可以获取一个元素的DOM对象
       // ref作用到组件上的时候 可以获取到该组件的实例 this
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="scss">

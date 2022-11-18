@@ -1,33 +1,31 @@
 <template>
-  <div>
-    <el-row type="flex" justify="space-between" align="middle" style="height:40px; width:100%">
-      <el-col>
-        <!-- 左侧内容 -->
-        <span>{{ treeNode.name }}</span>
-      </el-col>
+  <el-row type="flex" justify="space-between" align="middle" style="height:40px; width:100%">
+    <el-col>
+      <!-- 左侧内容 -->
+      <span>{{ treeNode.name }}</span>
+    </el-col>
 
-      <el-col :span="4">
-        <el-row type="flex" justify="end">
-          <el-col>{{ treeNode.manager }}</el-col>
-          <el-col>
-            <el-dropdown @command="operateDepts">
-              <span>
-                操作<i class="el-icon-arrow-down" />
-              </span>
-              <!-- 具名插槽 -->
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="add">添加部门</el-dropdown-item>
-                <el-dropdown-item v-if="!isRoot" command="edit">编辑部门</el-dropdown-item>
-                <el-dropdown-item v-if="!isRoot" command="delete">删除部门</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </el-col>
-        </el-row>
-        <!--右侧内容-->
-      </el-col>
+    <el-col :span="4">
+      <el-row type="flex" justify="end">
+        <el-col>{{ treeNode.manager }}</el-col>
+        <el-col>
+          <el-dropdown @command="operateDepts">
+            <span>
+              操作<i class="el-icon-arrow-down" />
+            </span>
+            <!-- 具名插槽 -->
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="add">添加部门</el-dropdown-item>
+              <el-dropdown-item v-if="!isRoot" command="edit">编辑部门</el-dropdown-item>
+              <el-dropdown-item v-if="!isRoot" command="delete">删除部门</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </el-col>
+      </el-row>
+      <!--右侧内容-->
+    </el-col>
 
-    </el-row>
-  </div>
+  </el-row>
 </template>
 
 <script>

@@ -15,7 +15,7 @@
       </el-card>
     </div>
     <!-- 放置新增弹层组件 -->
-    <add-dept :show-dialog.sync="showDialog" :tree-node="node" @addDepts="getDepartments" />
+    <add-dept ref="addDept" :show-dialog.sync="showDialog" :tree-node="node" @addDepts="getDepartments" />
   </div>
 </template>
 
@@ -63,6 +63,8 @@ export default {
     editDepts(node) {
       this.showDialog = true
       this.node = node
+      // console.log(this.$refs.adddept)
+      this.$refs.addDept.getDepartDetail(node.id)
     }
   }
 }
