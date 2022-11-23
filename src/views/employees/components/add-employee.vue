@@ -19,11 +19,17 @@
       </el-form-item>
       <el-form-item prop="formOfEmployment" label="聘用形式" style="width:500">
         <el-select v-model="staffForm.formOfEmployment" placeholder="请选择聘用形式">
-          <el-option
+          <!-- <el-option
             v-for="item in options"
             :key="item.value"
             :label="item.label"
             :value="item.value"
+          /> -->
+          <el-option
+            v-for="item in EmployeesEnum.hireType"
+            :key="item.id"
+            :label="item.value"
+            :value="item.id"
           />
         </el-select>
       </el-form-item>
@@ -33,7 +39,7 @@
       <el-form-item prop="departmentName" label="部门">
         <el-input v-model="staffForm.departmentName" placeholder="请选择部门" @focus="getDepartments" />
         <!-- 放置一个树形组件 -->
-        <el-tree v-if="showTree" v-loading="loading" :data="treeData" :props="{label:'name'}" default-expand-all />
+        <el-tree v-if="showTree" v-loading="loading" :data="treeData" :props="{label:'name'}" default-expand-all @node-click="selectNode" />
       </el-form-item>
       <el-form-item prop="correctionTime" label="转正时间">
         <el-date-picker
@@ -61,6 +67,7 @@
 import { getDepartments } from '@/api/departments'
 import { tranListToTreeData } from '@/utils'
 import { addEmployeeList } from '@/api/employees'
+import EmployeesEnum from '@/api/constant/employees'
 
 export default {
   name: 'HrsaasAddEmployee',
@@ -72,7 +79,7 @@ export default {
   },
   data() {
     return {
-      // clearFrom: '',
+      EmployeesEnum,
       staffForm: {
         username: '',
         mobile: '',
@@ -103,22 +110,13 @@ export default {
           { required: true, message: '工号不能为空', trigger: 'blur' }
         ],
         departmentName: [
-          { required: true, message: '部门不能为空', trigger: 'blur' }
+          { required: true, message: '部门不能为空', trigger: 'change' }
         ]
       },
       treeData: [], // 定义一个数组来接收树形结构
       showTree: false, // 默认不显示tree
       loading: false,
-      options: [
-        {
-          value: '选项1',
-          label: '正式'
-        },
-        {
-          value: '选项2',
-          label: '非正式'
-        }
-      ],
+      // options: [{// value: '选项1',label: '正式'},{// value: '选项2',label: '非正式'}],
       pickerOptions: {
         shortcuts: [
           {
@@ -160,17 +158,37 @@ export default {
       this.treeData = tranListToTreeData(depts, '')
       this.loading = false
     },
-    onClose() {
-      this.$refs.clearFrom.resetFields()
+    async onClose() {
+      this.staffForm = {
+        username: '',
+        mobile: '',
+        timeOfEntry: '',
+        formOfEmployment: '',
+        workNumber: '',
+        departmentName: '',
+        correctionTime: ''
+      }
+      await this.$refs.clearFrom.resetFields()
       this.$emit('update:isShow')
     },
     async onConfirm() {
       try {
-        this.$refs.clearFrom.validate()
-        await addEmployeeList()
+        await this.$refs.clearFrom.validate()
+        await addEmployeeList(this.staffForm) // 调用新增接口
+        // 通知父组件 更新数据
+        // this.$parent父组件实例(用的较少)
+        // console.log(this.$parent)
+        this.$parent.getEmployeeList && this.$parent.getEmployeeList() // 直接调用父组件的更新方法
+        this.$parent.isShow = false
+        this.onClose()
       } catch (error) {
         console.log(error)
       }
+    },
+    selectNode(node) {
+      // console.log(arguments)
+      this.staffForm.departmentName = node.name
+      this.showTree = false
     }
   }
 }
